@@ -6,8 +6,6 @@ DEBUG = True
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-63a@%0fb6&%iklwhkr###rn+asrpel7z4!oplpzs!v8pb_f@*@"
 
-# SECURITY WARNING: define the correct hosts in production!
-ALLOWED_HOSTS = ["*"]
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
