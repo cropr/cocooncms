@@ -18,10 +18,11 @@ from pathlib import Path
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 BASE_DIR = Path("/data")
+appname = "cocooncms"
 
 ### Core Settings ###
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'cocooncms-black-fog-8828.fly.dev']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', f'{appname}.fly.dev']
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -38,7 +39,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://cocooncms-black-fog-8828.fly.dev']
+CSRF_TRUSTED_ORIGINS = [f'https://{appname}.fly.dev']
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10_000
 
@@ -152,7 +153,7 @@ WAGTAILSEARCH_BACKENDS = {
     }
 }
 
-WAGTAILADMIN_BASE_URL = "https://cocooncms-black-fog-8828.fly.dev"
+WAGTAILADMIN_BASE_URL = f"https://{appname}.fly.dev"
 
 WAGTAILDOCS_EXTENSIONS = [
     "csv",

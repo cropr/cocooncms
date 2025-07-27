@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for cocooncms-black-fog-8828 on 2025-07-22T22:20:05+02:00
+# fly.toml app configuration file generated for cocooncms on 2025-07-22T22:20:05+02:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'cocooncms-black-fog-8828'
+app = 'cocooncms'
 primary_region = 'cdg'
 console_command = '/app/manage.py shell'
 
