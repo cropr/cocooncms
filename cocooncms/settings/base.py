@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "wagtail.admin",
     "wagtail",
     "modelcluster",
+    "rest_framework",    
     "taggit",
     "django_filters",
     "django.contrib.admin",
