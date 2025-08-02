@@ -1,5 +1,11 @@
 .venv/
 .github/
 .vscode
-__pycache__
+__pycache__/
+/data
+.DS_Store
+*.pyc
+*.pyo
+*.pyd
+
 
