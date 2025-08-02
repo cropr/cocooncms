@@ -13,16 +13,17 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 
-
-### Variables ###  
-
-PROJECT_DIR = Path(__file__).resolve().parents[1]
-BASE_DIR = Path("/data")
+### Variables ###
 appname = "cocooncms"
+project_dir = Path(__file__).resolve().parent
+base_dir_env = os.getenv("BASE_DIR")
+base_dir = Path(base_dir_env) if base_dir_env else project_dir.parent / "data"
+print(f"Project directory: {project_dir} ")
+print(f"Base directory: {base_dir}")
 
 ### Core Settings ###
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', f'{appname}.fly.dev']
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", f"{appname}.fly.dev"]
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -39,9 +40,19 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-CSRF_TRUSTED_ORIGINS = [f'https://{appname}.fly.dev']
+BASE_DIR = base_dir
+
+CORS_ALLOWED_ALL_ORIGINS = True
+
+CSRF_TRUSTED_ORIGINS = [f"https://{appname}.fly.dev", "http://localhost:3000"]
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10_000
+
+DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1")
+
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend"
+)
 
 INSTALLED_APPS = [
     "blog",
@@ -59,8 +70,9 @@ INSTALLED_APPS = [
     "wagtail.search",
     "wagtail.admin",
     "wagtail",
+    "corsheaders",
     "modelcluster",
-    "rest_framework",    
+    "rest_framework",
     "taggit",
     "django_filters",
     "django.contrib.admin",
@@ -71,10 +83,37 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ]
 
-MEDIA_ROOT = BASE_DIR / "media"
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
+        "wagtail": {
+            "handlers": ["console"],
+            "level": os.getenv("WAGTAIL_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
+    },
+}
+
+MEDIA_ROOT = base_dir / "media"
 MEDIA_URL = "/media/"
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -85,20 +124,24 @@ MIDDLEWARE = [
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
 ]
 
+PROJECT_DIR = project_dir
+
 ROOT_URLCONF = "cocooncms.urls"
+
+SECRET_KEY = os.getenv("SECRET_KEY", "stief geheim")
 
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
-STATICFILES_DIRS = [PROJECT_DIR /  "static"]
-STATIC_ROOT = BASE_DIR / "static" 
+STATICFILES_DIRS = [project_dir / "static"]
+STATIC_ROOT = base_dir / "static"
 STATIC_URL = "/static/"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [PROJECT_DIR / "templates"],
+        "DIRS": [project_dir / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -118,8 +161,12 @@ WSGI_APPLICATION = "cocooncms.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "postgres",
+        "USER": "postgres",
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "postgres"),
+        "HOST": os.getenv("POSTGRES_HOST", "localhost"),
+        "PORT": "5432",
     }
 }
 

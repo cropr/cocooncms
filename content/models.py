@@ -8,7 +8,7 @@ from wagtail.api import APIField
 class ContentIndexPage(Page):
     intro = RichTextField(blank=True)
 
-    content_panels = Page.content_panels + ["intro"]
+    content_panels = Page.content_panels
 
     subpage_types = ["content.ContentPage"]
 
